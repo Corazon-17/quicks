@@ -57,13 +57,13 @@
     },
     "title": {
       "loremWords": {
-        "minLength": 5,
-        "maxLength": 10
+        "minLength": 10,
+        "maxLength": 30
       }
     },
     "description": {
       "loremParagraphs": {
-        "minLength": 20,
+        "minLength": 30,
         "maxLength": 100
       }
     },
