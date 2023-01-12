@@ -1,5 +1,74 @@
 {
   "User": {
-    "title": { "string": {} }
+    "_": { "items": 3 },
+    "name": {
+      "string": ["Corazon17", "Mary Hilda", "Obaidullah Amarkhil"]
+    },
+    "inboxes": {
+      "hasMany": "Inbox"
+    },
+    "tasks": {
+      "hasMany": "Task"
+    }
+  },
+  "Inbox": {
+    "_": { "items": 10 },
+    "user": {
+      "belongsTo": "User"
+    },
+    "name": {
+      "loremWords": {
+        "minLength": 10,
+        "maxLength": 50
+      }
+    },
+    "messages": {
+      "hasMany": "Message"
+    }
+  },
+  "Message": {
+    "_": { "items": 30 },
+    "inbox": {
+      "belongsTo": "Inbox"
+    },
+    "createdAt": {
+      "dateTime": {
+        "min": "2023-01-10T00:00:00Z",
+        "max": "2023-03-13T23:59:59Z"
+      }
+    },
+    "body": {
+      "loremParagraphs": {
+        "minLength": 10,
+        "maxLength": 100
+      }
+    }
+  },
+  "Task": {
+    "_": { "items": 10 },
+    "user": {
+      "belongsTo": "User"
+    },
+    "createdAt": {
+      "dateTime": {
+        "min": "2023-01-10T00:00:00Z",
+        "max": "2023-03-13T23:59:59Z"
+      }
+    },
+    "title": {
+      "loremWords": {
+        "minLength": 5,
+        "maxLength": 10
+      }
+    },
+    "description": {
+      "loremParagraphs": {
+        "minLength": 20,
+        "maxLength": 100
+      }
+    },
+    "completed": {
+      "boolean": {}
+    }
   }
 }
