@@ -78,23 +78,14 @@
         "maxLength": 100
       }
     },
-    "stickers": {
-      "hasMany": "Sticker"
-    },
-    "completed": {
-      "boolean": {}
-    }
-  },
-  "Sticker": {
-    "_": { "items": 30 },
-    "index": {
+    "stickerId": {
       "int": {
         "min": 1,
         "max": 7
       }
     },
-    "task": {
-      "belongsTo": "Task"
+    "completed": {
+      "boolean": {}
     }
   }
 }

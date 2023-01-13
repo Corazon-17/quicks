@@ -17,13 +17,7 @@ export default function TaskList() {
       // url to get current activeUser task, order it by completed and date
       const url = `https://mockend.com/Corazon-17/quicks/tasks?userId_eq=${activeUserId}&completed_order=asc&deadline_order=desc`;
       const tasks: TaskModel[] = await (await axios.get(url)).data;
-
-      const stickers = tasks.map(async (task) => {
-        const stickerUrl = `https://mockend.com/Corazon-17/quicks/stickers?taskId_eq=${task.id}`;
-        const stickers = await (await axios.get(stickerUrl)).data;
-
-        console.log(stickers);
-      });
+      console.log(tasks)
 
       // const stickerUrls: string[] = [];
       // const taskIds: number[] = tasks.map((task) => task.id);
