@@ -1,6 +1,6 @@
 {
   "User": {
-    "_": { "items": 3 },
+    "_": { "items": 4 },
     "name": {
       "string": [
         "Corazon17",
@@ -86,18 +86,12 @@
     }
   },
   "Sticker": {
-    "_": { "items": 20 },
-    "name": {
-      "string": [
-        "Important ASAP",
-        "Offline Meeting",
-        "Virtual Meeting",
-        "ASAP",
-        "Client Related",
-        "Self Task",
-        "Appointments",
-        "Court Related"
-      ]
+    "_": { "items": 30 },
+    "index": {
+      "int": {
+        "min": 1,
+        "max": 7
+      }
     },
     "task": {
       "belongsTo": "Task"
