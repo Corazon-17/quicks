@@ -7,6 +7,9 @@
     "inboxes": {
       "hasMany": "Inbox"
     },
+    "messages": {
+      "hasMany": "Message"
+    },
     "tasks": {
       "hasMany": "Task"
     }
@@ -36,8 +39,8 @@
     },
     "createdAt": {
       "dateTime": {
-        "min": "2023-01-10T00:00:00Z",
-        "max": "2023-03-13T23:59:59Z"
+        "min": "2023-01-10T08:00:00Z",
+        "max": "2023-01-11T15:00:00Z"
       }
     },
     "body": {
@@ -54,8 +57,8 @@
     },
     "deadline": {
       "dateTime": {
-        "min": "2023-01-10T00:00:00Z",
-        "max": "2023-03-13T23:59:59Z"
+        "min": "2023-01-20T00:00:00Z",
+        "max": "2023-01-30T23:59:59Z"
       }
     },
     "title": {
