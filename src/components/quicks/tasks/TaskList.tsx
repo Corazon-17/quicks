@@ -16,38 +16,13 @@ export default function TaskList() {
     const fetchTaskData = async () => {
       // url to get current activeUser task, order it by completed and date
       const url = `https://mockend.com/Corazon-17/quicks/tasks?userId_eq=${activeUserId}&completed_order=asc&deadline_order=desc`;
-      const tasks: TaskModel[] = await (await axios.get(url)).data;
-      console.log(tasks)
-
-      // const stickerUrls: string[] = [];
-      // const taskIds: number[] = tasks.map((task) => task.id);
-      // taskIds.forEach((id) => {
-      //   stickerUrls.push(
-      //     `https://mockend.com/Corazon-17/quicks/stickers?taskId_eq=${id}`
-      //   );
-      // });
-
-      // var taskTemp: TaskModel[] = [...tasks];
-      // const requests = stickerUrls.map((url) => axios.get(url));
-      // await axios
-      //   .all(requests)
-      //   .then((responses) => {
-      //     responses.forEach((resp, i) => {
-      //       const stickers: Sticker[] = [];
-      //       resp.data.forEach((sticker: any) => {
-      //         if (!stickers.includes(sticker.name)) {
-      //           stickers.push(sticker.name);
-      //         }
-      //       });
-
-      //       taskTemp[i] = { ...taskTemp[i], stickers: stickers };
-      //     });
-      //   })
-      //   .catch((error) => console.log(error));
-
-      // setAllTask(taskTemp);
-      // setIsLoading(false);
-      // console.log(taskTemp);
+      await axios
+        .get(url)
+        .then(async (response) => {
+          setAllTask(response.data);
+          setIsLoading(false);
+        })
+        .catch((error) => console.log(error));
     };
 
     fetchTaskData();

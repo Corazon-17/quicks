@@ -22,7 +22,7 @@ export interface TaskModel {
   userId: number;
   title: string;
   description: string;
-  stickers: Array<Sticker> | [];
+  stickerId: number;
   deadline: string;
   completed: boolean;
 }

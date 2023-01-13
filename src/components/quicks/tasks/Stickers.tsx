@@ -6,10 +6,10 @@ import { useState } from "react";
 type StickerObj = { [key: string]: boolean };
 
 interface StickersProps {
-  stickers: Sticker[];
+  stickerId: number;
 }
 
-const initStickerObj = (stickers: Sticker[]): StickerObj => {
+const initStickerObj = (stickerId: number): StickerObj => {
   const stickerKeys: Sticker[] = [
     "Important ASAP",
     "Offline Meeting",
@@ -22,12 +22,12 @@ const initStickerObj = (stickers: Sticker[]): StickerObj => {
   ];
 
   return Object.fromEntries(
-    stickerKeys.map((key) => [key, stickers.includes(key)])
+    stickerKeys.map((key, i) => [key, stickerId === i + 1])
   );
 };
 
-export default function Stickers({ stickers }: StickersProps) {
-  const stickerOpt: StickerObj = initStickerObj(stickers);
+export default function Stickers({ stickerId }: StickersProps) {
+  const stickerOpt: StickerObj = initStickerObj(stickerId);
 
   const [value, setValue] = useState<StickerObj>(stickerOpt);
   const [toggleOpt, setToggleOpt] = useState<boolean>(false);
