@@ -48,7 +48,7 @@ export default function InboxChat({ inbox, setShowChat }: InboxChatProps) {
       </div>
 
       <div className="grid gap-2 overflow-y-auto rounded-b-md pl-4 pr-1 pb-2">
-        {messages.map((message) => {
+        {messages.map((message, i) => {
           let dateDivider: ReactNode = "";
 
           const date = extractDate(message.createdAt);
@@ -58,10 +58,10 @@ export default function InboxChat({ inbox, setShowChat }: InboxChatProps) {
           }
 
           return (
-            <>
+            <div key={i}>
               {dateDivider}
               <MessageCard message={message} handleReply={replyHandler} />
-            </>
+            </div>
           );
         })}
       </div>
