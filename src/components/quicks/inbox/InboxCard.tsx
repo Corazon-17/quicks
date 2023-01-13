@@ -1,6 +1,23 @@
 import { Icon } from "@/components/utils";
+import { useUserStore } from "@/store";
+import { InboxModel } from "@/types";
+import { extractDate, extractTime } from "@/utils";
 
-export default function InboxCard() {
+interface InboxCardProps {
+  inbox: InboxModel;
+}
+
+export default function InboxCard({ inbox }: InboxCardProps) {
+  const activeUserId = useUserStore((state) => state.id);
+  const lastMessage = inbox.messages.at(-1);
+  const lastMessageDate = lastMessage?.createdAt;
+
+  const lmDate = extractDate(lastMessageDate);
+  const lmTime = extractTime(lastMessageDate);
+  const lmSender =
+    activeUserId === lastMessage?.senderId ? "You" : lastMessage?.senderName;
+  const lmBody = lastMessage?.body;
+
   return (
     <div className="flex flex-row text-black gap-1 pt-4 pb-6 cursor-pointer">
       <div className="block relative mr-14">
@@ -28,18 +45,16 @@ export default function InboxCard() {
       <div className="flex flex-col grow">
         <div className="flex gap-4 justify-start mb-1">
           <span className="text-16 font-bold text-blue-500 break-all leading-none">
-            109220-Naturalization
+            {inbox.name}
           </span>
           <span className="text-14 font-bold whitespace-nowrap">
-            02/06/2021 10:45
+            {lastMessage ? `${lmDate} ${lmTime}` : ""}
           </span>
         </div>
         <span className="text-14 font-bold break-all leading-none mb-1">
-          Cameron Philips :
+          {lmSender}
         </span>
-        <span className="text-14 break-all leading-none">
-          Please check this out
-        </span>
+        <span className="text-14 break-all leading-none">{lmBody ? lmBody : "No message"}</span>
       </div>
       <div className="self-end bg-red-600 w-2 h-2 rounded-full"></div>
     </div>

@@ -1,20 +1,45 @@
 import { Icon } from "@/components/utils";
+import { InboxModel, MessageModel, ValueSetter } from "@/types";
+import { extractDate } from "@/utils";
+import { ReactNode, useRef, useState } from "react";
 import MessageCard from "./MessageCard";
 
-export default function InboxChat() {
+interface InboxChatProps {
+  inbox: InboxModel;
+  setShowChat: ValueSetter<boolean>;
+}
+
+export default function InboxChat({ inbox, setShowChat }: InboxChatProps) {
+  const dateRef = useRef<string>();
+  const messages = inbox.messages;
+  const participants = new Set(messages.map((message) => message.senderId))
+    .size;
+
+  const [replyMsg, setReplyMsg] = useState<MessageModel | null>(null);
+
+  const replyHandler = (message: MessageModel) => {
+    setReplyMsg(message);
+  };
+
+  const closeReplyHandler = () => {
+    setReplyMsg(null);
+  };
+
   return (
-    <div className="flex flex-col text-black gap-2 absolute bottom-20 w-[480px] h-[480px] rounded-md bg-white">
+    <div className="flex flex-col justify-between text-black gap-2 absolute w-[480px] h-[480px] rounded-md bg-white">
       <div className="w-full sticky top-0 border-b border-black rounded-t-md bg-white z-10">
         <div className="flex gap-2 min-h-max py-4 px-4 items-center">
-          <div className="pl-2 pr-1">
+          <div
+            className="pl-2 pr-1 cursor-pointer"
+            onClick={() => setShowChat(false)}
+          >
             <Icon name="arrow_left_black" width={16} />
           </div>
           <div className="flex flex-col flex-wrap overflow-hidden grow">
             <span className="text-14 font-bold text-blue-500 break-all leading-none">
-              I-589 - AMARKHIL,adhjahdjahdjahdj Obadullah [Affirmative Filling
-              with ZHN]
+              {inbox.name}
             </span>
-            <span className="text-12 pt-1">3 Participants</span>
+            <span className="text-12 pt-1">{participants} Participants</span>
           </div>
           <div className="justify-end">
             <Icon name="close_black" width={16} />
@@ -23,22 +48,36 @@ export default function InboxChat() {
       </div>
 
       <div className="grid gap-2 overflow-y-auto rounded-b-md pl-4 pr-1 pb-2">
-        <MessageCard />
-        <MessageCard />
-        <MessageCard />
-        <MessageCard />
+        {messages.map((message) => {
+          let dateDivider: ReactNode = "";
+
+          const date = extractDate(message.createdAt);
+          if (date !== dateRef.current) {
+            dateDivider = <DateDivider date={date as string} />;
+            dateRef.current = date;
+          }
+
+          return (
+            <>
+              {dateDivider}
+              <MessageCard message={message} handleReply={replyHandler} />
+            </>
+          );
+        })}
       </div>
 
       <div className="flex justify-between gap-2 sticky bottom-0 px-4 pb-2">
         <div className="grid relative w-full">
-          {/* <Reply /> */}
+          {replyMsg && (
+            <Reply message={replyMsg} handleClose={closeReplyHandler} />
+          )}
           <input
             placeholder="Type a new message"
             className="w-full border border-black rounded-b px-2 resize-none"
           />
         </div>
 
-        <button className="h-8 px-2 py-1 rounded text-white bg-blue-500">
+        <button className="h-8 px-2 py-1 rounded text-white bg-blue-500 self-end">
           Send
         </button>
       </div>
@@ -63,20 +102,31 @@ export default function InboxChat() {
   );
 }
 
-const Reply = () => {
+const DateDivider = ({ date }: { date: string }) => (
+  <div className="flex relative w-full justify-center">
+    <div className="absolute w-full h-1/2 border-b-2 border-black"></div>
+    <span className="px-4 bg-white z-10">{date}</span>
+  </div>
+);
+
+const Reply = ({
+  message,
+  handleClose,
+}: {
+  message: MessageModel;
+  handleClose: () => void;
+}) => {
   return (
-    <div className="absolute bottom-8 w-full text-12 bg-blue-200 px-2 py-2 border border-black">
+    <div className="flex z-20 sticky bottom-8 w-full text-12 bg-blue-200 px-2 py-2 border border-black">
       <div className="grid grid-cols-[1fr_24px] w-full">
         <div>
-          <span className="font-bold">Replying to Mary Hilda</span>
-          <p className="leading-tight">
-            Hello Obaidullah, I will be your case advisor for case #029290. I
-            have assigned some homework for you to fill. Please keep up with the
-            due dates. Should you have any questions, you can message me
-            anytime. Thanks.
-          </p>
+          <span className="font-bold">Replying to {message.senderName}</span>
+          <p className="leading-tight">{message.body}</p>
         </div>
-        <div className="self-start justify-self-end pr-1">
+        <div
+          className="self-start justify-self-end pr-1 cursor-pointer"
+          onClick={() => handleClose()}
+        >
           <Icon name="close_black" width={12} />
         </div>
       </div>

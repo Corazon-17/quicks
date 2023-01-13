@@ -16,21 +16,22 @@ export default function TaskList() {
     const fetchTaskData = async () => {
       // url to get current activeUser task, order it by completed and date
       const url = `https://mockend.com/Corazon-17/quicks/tasks?userId_eq=${activeUserId}&completed_order=asc&deadline_order=desc`;
+
       await axios
         .get(url)
         .then(async (response) => {
           const data: TaskModel[] = response.data;
 
-          const urls: string[] = [];
-          const taskIds: number[] = data.map((task: TaskModel) => task.id);
+          const stickerUrls: string[] = [];
+          const taskIds: number[] = data.map((task) => task.id);
           taskIds.forEach((id) => {
-            urls.push(
+            stickerUrls.push(
               `https://mockend.com/Corazon-17/quicks/stickers?taskId_eq=${id}`
             );
           });
 
           var taskTemp: TaskModel[] = [...data];
-          const requests = urls.map(async (url) => axios.get(url));
+          const requests = stickerUrls.map(async (url) => axios.get(url));
           await axios
             .all(requests)
             .then((responses) => {
@@ -55,7 +56,6 @@ export default function TaskList() {
 
     fetchTaskData();
   }, []);
-  console.log(allTask)
 
   return (
     <div className="flex flex-col w-full h-full">

@@ -1,3 +1,7 @@
+import { Dispatch } from "react";
+
+export type ValueSetter<Type> = Dispatch<React.SetStateAction<Type>>;
+
 export interface ComponentProps {
   classname?: string;
   children?: React.ReactNode;
@@ -21,4 +25,20 @@ export interface TaskModel {
   stickers: Array<Sticker> | [];
   deadline: string;
   completed: boolean;
+}
+
+export interface MessageModel {
+  id: number;
+  inboxId: number;
+  senderId: number;
+  senderName?: string;
+  createdAt: string;
+  body: string;
+}
+
+export interface InboxModel {
+  id: number;
+  userId: number;
+  name: string;
+  messages: MessageModel[];
 }
