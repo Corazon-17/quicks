@@ -1,6 +1,6 @@
 {
   "User": {
-    "_": { "items": 8 },
+    "_": { "items": 3 },
     "name": {
       "string": ["Corazon17", "Mary Hilda", "Obaidullah Amarkhil"]
     },
@@ -67,8 +67,29 @@
         "maxLength": 100
       }
     },
+    "stickers": {
+      "hasMany": "Sticker"
+    },
     "completed": {
       "boolean": {}
+    }
+  },
+  "Sticker": {
+    "_": { "items": 100 },
+    "name": {
+      "string": [
+        "Important ASAP",
+        "Offline Meeting",
+        "Virtual Meeting",
+        "ASAP",
+        "Client Related",
+        "Self Task",
+        "Appointments",
+        "Court Related"
+      ]
+    },
+    "task": {
+      "belongsTo": "Task"
     }
   }
 }
