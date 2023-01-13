@@ -2,7 +2,7 @@
   "User": {
     "_": { "items": 3 },
     "name": {
-      "string": ["Corazon17", "Mary Hilda", "Cameron Phillips", "Obaidullah Amarkhil"]
+      "string": ["Corazon17", "Mary Hilda", "Obaidullah Amarkhil"]
     },
     "inboxes": {
       "hasMany": "Inbox"
