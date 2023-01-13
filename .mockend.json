@@ -12,7 +12,7 @@
     }
   },
   "Inbox": {
-    "_": { "items": 10 },
+    "_": { "items": 15 },
     "user": {
       "belongsTo": "User"
     },
@@ -27,9 +27,12 @@
     }
   },
   "Message": {
-    "_": { "items": 30 },
+    "_": { "items": 50 },
     "inbox": {
       "belongsTo": "Inbox"
+    },
+    "sender": {
+      "belongsTo": "User"
     },
     "createdAt": {
       "dateTime": {
@@ -45,7 +48,7 @@
     }
   },
   "Task": {
-    "_": { "items": 10 },
+    "_": { "items": 20 },
     "user": {
       "belongsTo": "User"
     },
@@ -75,7 +78,7 @@
     }
   },
   "Sticker": {
-    "_": { "items": 100 },
+    "_": { "items": 50 },
     "name": {
       "string": [
         "Important ASAP",
