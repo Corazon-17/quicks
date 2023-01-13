@@ -3,3 +3,11 @@ export const getTruthyKeys = (obj: { [key: string]: boolean }): string[] => {
 
   return Object.keys(obj).filter((key) => obj[key as ObjectKey]);
 };
+
+export const countDaysLeft = (deadline: string) => {
+  const today = new Date();
+  const end = new Date(deadline);
+  const difference = end.getDate() - today.getDate();
+
+  return difference > 0 ? difference : 0;
+};

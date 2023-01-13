@@ -1,7 +1,6 @@
 import { Icon } from "@/components/utils";
 import { useQuickStore } from "@/store";
 import { useEffect, useState } from "react";
-import TaskAccordion from "./TaskAccordion";
 import TaskList from "./TaskList";
 
 export default function Tasks() {

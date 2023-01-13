@@ -1,20 +1,33 @@
 import { Icon } from "@/components/utils";
+import { Sticker } from "@/types";
 import { getTruthyKeys } from "@/utils";
 import { useState } from "react";
 
 type StickerObj = { [key: string]: boolean };
 
-export default function Stickers() {
-  const stickerOpt: StickerObj = {
-    "Important ASAP": true,
-    "Offline Meeting": true,
-    "Virtual Meeting": false,
-    ASAP: false,
-    "Client Related": false,
-    "Self Task": false,
-    Appointments: false,
-    "Court Related": false,
-  };
+interface StickersProps {
+  stickers: Sticker[];
+}
+
+const initStickerObj = (stickers: Sticker[]): StickerObj => {
+  const stickerKeys: Sticker[] = [
+    "Important ASAP",
+    "Offline Meeting",
+    "Virtual Meeting",
+    "ASAP",
+    "Client Related",
+    "Self Task",
+    "Appointments",
+    "Court Related",
+  ];
+
+  return Object.fromEntries(
+    stickerKeys.map((key) => [key, stickers.includes(key)])
+  );
+};
+
+export default function Stickers({ stickers }: StickersProps) {
+  const stickerOpt: StickerObj = initStickerObj(stickers);
 
   const [value, setValue] = useState<StickerObj>(stickerOpt);
   const [toggleOpt, setToggleOpt] = useState<boolean>(false);

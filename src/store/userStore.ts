@@ -8,6 +8,6 @@ interface User {
 }
 
 export const useUserStore = create<User>((set) => ({
-  id: null,
+  id: 1,
   setId: (newId: Id) => set({ id: newId }),
 }));

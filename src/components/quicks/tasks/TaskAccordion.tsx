@@ -1,5 +1,6 @@
 import { Icon } from "@/components/utils";
-import { TaskModel } from "@/types";
+import { Sticker, TaskModel } from "@/types";
+import { countDaysLeft } from "@/utils";
 import { useRef, useState } from "react";
 import Stickers from "./Stickers";
 
@@ -8,25 +9,32 @@ interface TaskAccordionProps {
 }
 
 export default function TaskAccordion({ task }: TaskAccordionProps) {
-  const [collapse, setCollapse] = useState<boolean>(false);
+  const [collapse, setCollapse] = useState<boolean>(
+    task.completed ? false : true
+  );
   const [toggleOpt, setToggleOpt] = useState<boolean>(false);
   const [editTaskDetail, setEditTaskDetail] = useState<boolean>(false);
 
   const taskDetailRef = useRef<HTMLDivElement>(null);
+  const deadline = task.deadline.slice(0, 10);
+  const daysLeft = countDaysLeft(deadline);
 
   return (
     <div className="grid gap-2 py-4 ">
       <div className="grid grid-cols-[65%_35%]">
         <div className="grid grid-cols-[24px_1fr] gap-1 items-start">
-          <Icon name="square" width={24} />
-          <span className="font-bold">
-            Close off Case #012920- RODRIGUES, Amiguel
+          <Icon
+            name={`${task.completed ? "square_checked" : "square"}`}
+            width={24}
+          />
+          <span className={`font-bold ${task.completed && "line-through"}`}>
+            {task.title}
           </span>
         </div>
         <div className="h-max justify-self-end">
           <div className="flex items-center gap-2 text-12">
-            <span className="text-red-400">2 Days Left</span>
-            <span>12/06/2021</span>
+            <span className="text-red-400">{daysLeft} Days Left</span>
+            <span>{deadline}</span>
             <button onClick={() => setCollapse(!collapse)}>
               <Icon name="arrow_down_black" width={10} />
             </button>
@@ -35,7 +43,7 @@ export default function TaskAccordion({ task }: TaskAccordionProps) {
                 <Icon name="other" width={14} />
               </button>
               {toggleOpt && (
-                <button className="absolute right-0 top-4 w-20 text-start border border-black rounded text-red-500 px-3 py-1">
+                <button className="absolute right-0 top-4 w-20 text-start bg-white border border-black rounded text-red-500 px-3 py-1">
                   Delete
                 </button>
               )}
@@ -53,7 +61,7 @@ export default function TaskAccordion({ task }: TaskAccordionProps) {
           </div> */}
             <input
               type="date"
-              value="2021-06-12"
+              value={deadline}
               onChange={() => {}}
               className="border border-black rounded px-2 py-1"
             />
@@ -72,14 +80,11 @@ export default function TaskAccordion({ task }: TaskAccordionProps) {
               onBlur={() => setEditTaskDetail(false)}
               className={`leading-4 ${editTaskDetail && "px-2 py-1"}`}
             >
-              Closing off this case since this application has been cancelled.
-              No one really understand how this case could possibly be
-              cancelled. The options and the documents within this document were
-              totally a guaranteed for a success!
+              {task.description}
             </div>
           </div>
 
-          <Stickers />
+          <Stickers stickers={task.stickers as Sticker[]} />
         </div>
       )}{" "}
     </div>
