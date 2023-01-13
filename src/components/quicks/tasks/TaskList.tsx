@@ -18,10 +18,11 @@ export default function TaskList() {
       const url = `https://mockend.com/Corazon-17/quicks/tasks?userId_eq=${activeUserId}&completed_order=asc&deadline_order=desc`;
       const tasks: TaskModel[] = await (await axios.get(url)).data;
 
-      const taskTemp = tasks.map(async (task) => {
+      const stickers = tasks.map(async (task) => {
         const stickerUrl = `https://mockend.com/Corazon-17/quicks/stickers?taskId_eq=${task.id}`;
         const stickers = await (await axios.get(stickerUrl)).data;
-        console.log(stickers)
+
+        console.log(stickers);
       });
 
       // const stickerUrls: string[] = [];
@@ -52,7 +53,7 @@ export default function TaskList() {
 
       // setAllTask(taskTemp);
       // setIsLoading(false);
-      console.log(taskTemp);
+      // console.log(taskTemp);
     };
 
     fetchTaskData();

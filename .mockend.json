@@ -86,7 +86,7 @@
     }
   },
   "Sticker": {
-    "_": { "items": 100 },
+    "_": { "items": 20 },
     "name": {
       "string": [
         "Important ASAP",
