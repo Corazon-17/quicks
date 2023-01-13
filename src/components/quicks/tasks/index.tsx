@@ -1,10 +1,23 @@
 import { Icon } from "@/components/utils";
-import { useState } from "react";
+import { useQuickStore } from "@/store";
+import { useEffect, useState } from "react";
 import TaskAccordion from "./TaskAccordion";
+import TaskList from "./TaskList";
 
 export default function Tasks() {
-  const [toggleTask, setToggleTask] = useState<boolean>(false);
+  const expand = useQuickStore((state) => state.expand);
+  const activeQuick = useQuickStore((state) => state.active);
+  const setActiveQuick = useQuickStore((state) => state.setActive);
+
   const [active, setActive] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (active) {
+      setActiveQuick("Tasks");
+    } else {
+      setActiveQuick(null);
+    }
+  }, [active]);
 
   return (
     <div className="flex flex-col-reverse items-end">
@@ -38,52 +51,13 @@ export default function Tasks() {
         </div>
       )}
 
-      {!active ? (
-        <span className="absolute bottom-16 w-full text-center">Inbox</span>
-      ) : (
+      {expand && !activeQuick && (
+        <span className="absolute bottom-16 w-full text-center">Tasks</span>
+      )}
+
+      {active && (
         <div className="flex flex-col z-20 gap-2 absolute bottom-20 w-[540px] h-[480px] rounded-md bg-white text-black text-14">
-          <div className="flex justify-between mt-2 px-4">
-            <div className="grid relative place-items-center w-64">
-              <button
-                className="flex w-max items-center gap-2 bg-white border border-black rounded px-2 py-1 "
-                onClick={() => setToggleTask(!toggleTask)}
-              >
-                <span className="font-bold">My Tasks</span>
-                <Icon name="arrow_down_black" width={12} />
-              </button>
-              {toggleTask && (
-                <div className="absolute top-8">
-                  <div className="grid w-56 mt-2 bg-white border border-black rounded divide-y divide-black">
-                    <button className="text-start font-bold px-2 py-1">
-                      Personal Errands
-                    </button>
-                    <button className="text-start font-bold px-2 py-1">
-                      Urgent To-Do
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
-            <button className="h-max bg-blue-500 rounded px-2 py-1 text-white">
-              New Task
-            </button>
-          </div>
-
-          {/* <div className="flex items-center justify-center w-full h-full">
-          <div className="grid">
-            <div className="w-max animate-spin">
-              <Icon name="spinner" />
-            </div>
-            <span>Loading Tasks...</span>
-          </div>
-        </div> */}
-
-          <div className="overflow-y-auto divide-y divide-black pl-4 pr-2 min-h-[1fr]">
-            <TaskAccordion />
-            <TaskAccordion />
-            <TaskAccordion />
-            <TaskAccordion />
-          </div>
+          <TaskList />
         </div>
       )}
     </div>

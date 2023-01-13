@@ -1,8 +1,13 @@
 import { Icon } from "@/components/utils";
-import { LegacyRef, MutableRefObject, useRef, useState } from "react";
+import { TaskModel } from "@/types";
+import { useRef, useState } from "react";
 import Stickers from "./Stickers";
 
-export default function TaskAccordion() {
+interface TaskAccordionProps {
+  task: TaskModel;
+}
+
+export default function TaskAccordion({ task }: TaskAccordionProps) {
   const [collapse, setCollapse] = useState<boolean>(false);
   const [toggleOpt, setToggleOpt] = useState<boolean>(false);
   const [editTaskDetail, setEditTaskDetail] = useState<boolean>(false);
@@ -38,7 +43,6 @@ export default function TaskAccordion() {
           </div>
         </div>
       </div>
-      
       {collapse && (
         <div className="grid px-4 gap-2">
           <div className="grid grid-cols-[20px_1fr] pl-2 w-max relative gap-4 items-center">
