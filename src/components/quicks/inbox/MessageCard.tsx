@@ -7,11 +7,13 @@ import { useState } from "react";
 interface MessageCardProps {
   message: MessageModel;
   handleReply: (message: MessageModel) => void;
+  hideOption?: boolean;
 }
 
 export default function MessageCard({
   message,
   handleReply,
+  hideOption,
 }: MessageCardProps) {
   const activeUserId = useUserStore((state) => state.id);
 
@@ -25,6 +27,19 @@ export default function MessageCard({
         <span className={`w-full text-purple-400 ${yourself && "text-end"}`}>
           {yourself ? "You" : message.senderName}
         </span>
+
+        {message.replyMessage && (
+          <div
+            className={`flex ${
+              yourself && "flex-row-reverse self-end"
+            } items-start gap-1 w-80`}
+          >
+            <div className="grid gap-1 w-full text-14 border p-2 rounded-md bg-purple-400">
+              <p>{message.replyMessage}</p>
+            </div>
+          </div>
+        )}
+
         <div
           className={`flex ${
             yourself && "flex-row-reverse self-end"
@@ -35,9 +50,11 @@ export default function MessageCard({
             <span>{time}</span>
           </div>
           <div className="grid relative">
-            <button onClick={() => setToggleOpt(!toggleOpt)}>
-              <Icon name="other" width={16} />
-            </button>
+            {!hideOption && (
+              <button onClick={() => setToggleOpt(!toggleOpt)}>
+                <Icon name="other" width={16} />
+              </button>
+            )}
 
             {toggleOpt && (
               <div

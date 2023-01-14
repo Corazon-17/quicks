@@ -1,4 +1,5 @@
 import { Icon } from "@/components/utils";
+import { useInboxStore, useQuickStore } from "@/store";
 import { InboxModel, MessageModel, ValueSetter } from "@/types";
 import { extractDate } from "@/utils";
 import { ReactNode, useRef, useState } from "react";
@@ -10,12 +11,16 @@ interface InboxChatProps {
 }
 
 export default function InboxChat({ inbox, setShowChat }: InboxChatProps) {
+  const setActiveQuick = useQuickStore((state) => state.setActive);
+  const addNewMessage = useInboxStore((state) => state.addNewMessage);
+
+  const [textMessage, setTextMessage] = useState<string>("");
+  const [replyMsg, setReplyMsg] = useState<MessageModel | null>(null);
+  const [messages, setMessages] = useState<MessageModel[]>(inbox.messages);
+
   const dateRef = useRef<string>();
-  const messages = inbox.messages;
   const participants = new Set(messages.map((message) => message.senderId))
     .size;
-
-  const [replyMsg, setReplyMsg] = useState<MessageModel | null>(null);
 
   const replyHandler = (message: MessageModel) => {
     setReplyMsg(message);
@@ -25,8 +30,26 @@ export default function InboxChat({ inbox, setShowChat }: InboxChatProps) {
     setReplyMsg(null);
   };
 
+  const sendMessageHandler = () => {
+    const date = new Date();
+    const newMsg = {
+      id: 0,
+      inboxId: inbox.id,
+      senderId: inbox.userId,
+      senderName: "Corazon17",
+      createdAt: date.toJSON(),
+      body: textMessage,
+      replyMessage: replyMsg ? replyMsg.body : undefined,
+    };
+
+    setTextMessage("");
+    addNewMessage(newMsg, inbox.id);
+    setMessages([...messages, newMsg]);
+    setReplyMsg(null)
+  };
+
   return (
-    <div className="flex flex-col justify-between text-black gap-2 absolute w-[480px] h-[480px] rounded-md bg-white">
+    <div className="flex flex-col justify-start text-black gap-2 absolute w-[480px] h-[480px] rounded-md bg-white">
       <div className="w-full sticky top-0 border-b border-black rounded-t-md bg-white z-10">
         <div className="flex gap-2 min-h-max py-4 px-4 items-center">
           <div
@@ -41,13 +64,16 @@ export default function InboxChat({ inbox, setShowChat }: InboxChatProps) {
             </span>
             <span className="text-12 pt-1">{participants} Participants</span>
           </div>
-          <div className="justify-end">
+          <div
+            className="justify-end cursor-pointer"
+            onClick={() => setActiveQuick(null)}
+          >
             <Icon name="close_black" width={16} />
           </div>
         </div>
       </div>
 
-      <div className="grid gap-2 overflow-y-auto rounded-b-md pl-4 pr-1 pb-2">
+      <div className="flex flex-col grow gap-2 overflow-y-auto rounded-b-md pl-4 pr-1 pb-2">
         {messages.map((message, i) => {
           let dateDivider: ReactNode = "";
 
@@ -72,12 +98,17 @@ export default function InboxChat({ inbox, setShowChat }: InboxChatProps) {
             <Reply message={replyMsg} handleClose={closeReplyHandler} />
           )}
           <input
+            value={textMessage}
+            onChange={(e) => setTextMessage(e.target.value)}
             placeholder="Type a new message"
             className="w-full border border-black rounded-b px-2 resize-none"
           />
         </div>
 
-        <button className="h-8 px-2 py-1 rounded text-white bg-blue-500 self-end">
+        <button
+          onClick={() => sendMessageHandler()}
+          className="h-8 px-2 py-1 rounded text-white bg-blue-500 self-end"
+        >
           Send
         </button>
       </div>
@@ -87,16 +118,6 @@ export default function InboxChat({ inbox, setShowChat }: InboxChatProps) {
         {/* <span className="w-max cursor-pointer place-self-center text-14 px-2 py-1 text-blue-600 bg-blue-100 rounded-md">
           New Message
         </span> */}
-
-        {/* Waiting message */}
-        {/* <div className="flex gap-1 items-center bg-[#E9F3FF] px-2 py-1 rounded">
-          <div className="animate-spin">
-            <Icon name="spinner_blue" width={24} />
-          </div>
-          <span className="text-14">
-            Please wait while we connect you with one of our team
-          </span>
-        </div> */}
       </div>
     </div>
   );

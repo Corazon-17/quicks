@@ -1,25 +1,37 @@
 import { Icon } from "@/components/utils";
-import { useUserStore } from "@/store";
+import { useInboxStore, useUserStore } from "@/store";
 import { InboxModel, MessageModel } from "@/types";
 import axios from "axios";
 import { ReactNode, useEffect, useState } from "react";
+import FastVisaSupport from "./FastVisaSupport";
 import InboxCard from "./InboxCard";
 import InboxChat from "./InboxChat";
 
 export default function InboxList() {
   const activeUserId = useUserStore((state) => state.id);
+  const inboxUserId = useInboxStore((state) => state.userId);
+  const inboxDataState: InboxModel[] = useInboxStore(
+    (state) => state.inboxData
+  );
+  console.log(inboxDataState)
+  const setInboxUserId = useInboxStore((state) => state.setUserId);
+  const setInboxDataState = useInboxStore((state) => state.setInboxData);
 
-  const [allInbox, setAllInbox] = useState<InboxModel[] | null>(null);
-  const [chatComponent, setChatComponent] = useState<ReactNode>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [searchText, setSearchText] = useState<string>("");
   const [isShowChat, setIsShowChat] = useState<boolean>(false);
+  const [chatComponent, setChatComponent] = useState<ReactNode>(null);
 
   const handleInboxClick = (idx: number) => {
     setChatComponent(
-      <InboxChat
-        inbox={allInbox![idx]}
-        setShowChat={setIsShowChat}
-      />
+      <InboxChat inbox={inboxDataState![idx]} setShowChat={setIsShowChat} />
+    );
+    setIsShowChat(true);
+  };
+
+  const handleSupportClick = () => {
+    setChatComponent(
+      <FastVisaSupport inbox={inboxDataState![0]} setShowChat={setIsShowChat} />
     );
     setIsShowChat(true);
   };
@@ -31,7 +43,7 @@ export default function InboxList() {
   }, [isShowChat]);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchInboxData = async () => {
       const inboxUrl = `https://mockend.com/Corazon-17/quicks/inboxs?userId_eq=${activeUserId}`;
 
       await axios
@@ -72,14 +84,19 @@ export default function InboxList() {
               })
               .catch((error) => console.log(error));
 
-            setAllInbox(inboxTemp);
+            setInboxUserId(activeUserId as number);
+            setInboxDataState(inboxTemp);
             setIsLoading(false);
           });
         })
         .catch((error) => console.log(error));
     };
 
-    fetchData();
+    if (!inboxDataState || activeUserId !== inboxUserId) {
+      fetchInboxData();
+    } else {
+      setIsLoading(false);
+    }
   }, []);
 
   return (
@@ -87,7 +104,12 @@ export default function InboxList() {
       {!isShowChat && (
         <div className="w-full px-4 pt-3 pb-1">
           <div className="flex sticky top-0 bg-white justify-between w-full h-max px-8 border border-black rounded-md">
-            <input placeholder="search" className="text-black outline-none" />
+            <input
+              placeholder="search"
+              value={searchText}
+              onChange={(e) => setSearchText(e.target.value)}
+              className="text-black outline-none grow"
+            />
             <Icon name="search_black" width={16} />
           </div>
         </div>
@@ -104,14 +126,36 @@ export default function InboxList() {
         </div>
       )}
 
-      {!isLoading && allInbox && (
+      {!isLoading && inboxDataState && (
         <div className="flex flex-col w-full h-full px-4 overflow-y-auto">
           <div className="grid grid-cols-1 divide-y divide-gray-400">
-            {allInbox.map((inbox, i) => (
-              <div key={i} onClick={() => handleInboxClick(i)}>
-                <InboxCard inbox={inbox} />
-              </div>
-            ))}
+            {inboxDataState
+              .filter((inbox) => inbox.name.includes(searchText))
+              .map((inbox, i) => (
+                <div key={i} onClick={() => handleInboxClick(i)}>
+                  <InboxCard inbox={inbox} />
+                </div>
+              ))}
+
+            <div onClick={() => handleSupportClick()}>
+              <InboxCard
+                inbox={{
+                  id: 0,
+                  userId: 1,
+                  name: "FastVisa Support",
+                  messages: [
+                    {
+                      id: 0,
+                      inboxId: 0,
+                      senderId: 0,
+                      senderName: "",
+                      createdAt: "2023-01-11",
+                      body: "Hey There",
+                    },
+                  ],
+                }}
+              />
+            </div>
           </div>
         </div>
       )}

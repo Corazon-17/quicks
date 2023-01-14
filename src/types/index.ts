@@ -34,6 +34,7 @@ export interface MessageModel {
   senderName?: string;
   createdAt: string;
   body: string;
+  replyMessage?: string;
 }
 
 export interface InboxModel {

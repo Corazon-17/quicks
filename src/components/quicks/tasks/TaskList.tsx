@@ -1,5 +1,5 @@
 import { Icon } from "@/components/utils";
-import { useUserStore } from "@/store";
+import { useTaskStore, useUserStore } from "@/store";
 import { Sticker, TaskModel } from "@/types";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -7,10 +7,32 @@ import TaskAccordion from "./TaskAccordion";
 
 export default function TaskList() {
   const activeUserId = useUserStore((state) => state.id);
+  const taskUserId = useTaskStore((state) => state.userId);
+  const taskDataState: TaskModel[] = useTaskStore((state) => state.taskData);
+  const setTaskUserId = useTaskStore((state) => state.setUserId);
+  const setTaskDataState = useTaskStore((state) => state.setTaskData);
 
-  const [allTask, setAllTask] = useState<TaskModel[] | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [toggleTask, setToggleTask] = useState<boolean>(false);
+
+  // const addBlankTask = () => {
+  //   const date = new Date();
+  //   const blankTask: TaskModel = {
+  //     id: taskDataState.length + 1,
+  //     userId: taskDataId as number,
+  //     title: "",
+  //     description: "",
+  //     stickerIds: [],
+  //     deadline: date.toJSON().slice(0, 10),
+  //     completed: false,
+  //   };
+  //   const newTaskData: TaskModel[] = [
+  //     blankTask,
+  //     ...(taskDataState as TaskModel[]),
+  //   ];
+
+  //   setTaskDataState(newTaskData);
+  // };
 
   useEffect(() => {
     const fetchTaskData = async () => {
@@ -19,18 +41,24 @@ export default function TaskList() {
       await axios
         .get(url)
         .then(async (response) => {
-          const data = response.data
+          const data = response.data;
           const tasks: TaskModel[] = data.map((task: TaskModel) => {
-            return {...task, stickerIds: [task.stickerIds]}
-          })
-          
-          setAllTask(tasks);
+            return { ...task, stickerIds: [task.stickerIds] };
+          });
+
+          setTaskUserId(activeUserId as number);
+          setTaskDataState(tasks);
           setIsLoading(false);
         })
         .catch((error) => console.log(error));
     };
 
-    fetchTaskData();
+    // only fetch data when taskDataState is null or activeUser change
+    if (!taskDataState || activeUserId !== taskUserId) {
+      fetchTaskData();
+    } else {
+      setIsLoading(false);
+    }
   }, []);
 
   return (
@@ -58,7 +86,10 @@ export default function TaskList() {
               </div>
             )}
           </div>
-          <button className="h-max bg-blue-500 rounded px-2 py-1 text-white">
+          <button
+            // onClick={() => addBlankTask()}
+            className="h-max bg-blue-500 rounded px-2 py-1 text-white"
+          >
             New Task
           </button>
         </div>
@@ -75,9 +106,9 @@ export default function TaskList() {
         </div>
       )}
 
-      {!isLoading && allTask && (
+      {!isLoading && taskDataState && (
         <div className="overflow-y-auto divide-y divide-black pl-4 pr-2 min-h-[1fr]">
-          {allTask.map((task, i) => (
+          {taskDataState.map((task, i) => (
             <TaskAccordion key={i} task={task} />
           ))}
         </div>
