@@ -63,11 +63,11 @@ export default function TaskList() {
 
   return (
     <div className="flex flex-col w-full h-full">
-      <div className="sticky top-0 py-2 bg-white z-10">
+      <div className="sticky top-0 py-[10px] fhd:pt-[19px] fhd:pb-[10px] bg-white z-10 rounded-md">
         <div className="flex justify-between px-4">
           <div className="grid relative place-items-center w-64">
             <button
-              className="flex w-max items-center gap-2 bg-white border border-black rounded px-2 py-1 "
+              className="flex w-max items-center gap-2 bg-white border border-black rounded px-2.5 py-1 "
               onClick={() => setToggleTask(!toggleTask)}
             >
               <span className="font-bold">My Tasks</span>
@@ -75,7 +75,7 @@ export default function TaskList() {
             </button>
             {toggleTask && (
               <div className="absolute top-8">
-                <div className="grid w-56 mt-2 bg-white border border-black rounded divide-y divide-black">
+                <div className="grid w-[246px] mt-2 bg-white border border-[#828282] rounded divide-y divide-black">
                   <button className="text-start font-bold px-2 py-1">
                     Personal Errands
                   </button>
@@ -88,7 +88,7 @@ export default function TaskList() {
           </div>
           <button
             // onClick={() => addBlankTask()}
-            className="h-max bg-blue-500 rounded px-2 py-1 text-white"
+            className="h-max bg-blue-500 rounded px-3 py-1.5 text-white"
           >
             New Task
           </button>

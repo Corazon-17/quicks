@@ -11,9 +11,11 @@ export default function Quicks() {
   const activeQuick = useQuickStore((state) => state.active);
   const setExpand = useQuickStore((state) => state.setExpand);
 
+  const bigWidth = 68
+  const smallWidth = 60
   const defaultOffset = {
-    Inbox: 85,
-    Tasks: 170,
+    Inbox: bigWidth + 26,
+    Tasks: bigWidth + smallWidth + (26 * 2),
   };
   const [offset, setOffset] = useState<Offset>(defaultOffset);
   type OffsetKey = keyof typeof offset;
@@ -21,13 +23,13 @@ export default function Quicks() {
   useEffect(() => {
     if (activeQuick) {
       let newOffset = { ...offset };
-      newOffset[activeQuick as OffsetKey] = 1;
+      newOffset[activeQuick as OffsetKey] = 0;
 
       const otherKeys = Object.keys(newOffset).filter(
         (key) => key !== activeQuick
       );
       otherKeys.forEach((key, i) => {
-        newOffset[key] = (i + 1) * 85;
+        newOffset[key] = bigWidth + (smallWidth * i) + ((i + 1) * 31);
       });
 
       setOffset(newOffset);
@@ -38,9 +40,9 @@ export default function Quicks() {
   }, [activeQuick]);
 
   return (
-    <div className="flex flex-row-reverse gap-6 items-center justify-center absolute bottom-8 right-8">
+    <div className="flex flex-row-reverse w-full justify-start gap-6 items-center absolute bottom-[27px] right-[34px]">
       <button
-        className={`${activeQuick ? "opacity-0 z-0" : "z-10"}`}
+        className={`${activeQuick ? "opacity-0 z-0" : "opacity-100 z-10"} transition-all duration-500`}
         onClick={() => setExpand(!expand)}
       >
         <Icon
@@ -53,14 +55,14 @@ export default function Quicks() {
         />
       </button>
       <div
-        className={`absolute transition-all duration-700`}
-        style={{ right: expand ? offset["Tasks"] : 1 }}
+        className={`absolute transition-all duration-500`}
+        style={{ right: expand ? offset["Tasks"] : 0 }}
       >
         <Tasks />
       </div>
       <div
-        className={`absolute transition-all duration-700`}
-        style={{ right: expand ? offset["Inbox"] : 1 }}
+        className={`absolute transition-all duration-500`}
+        style={{ right: expand ? offset["Inbox"] : 0 }}
       >
         <Inbox />
       </div>

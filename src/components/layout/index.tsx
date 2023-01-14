@@ -4,9 +4,9 @@ import { Icon } from "../utils";
 export default function Layout({ children }: ComponentProps) {
   return (
     <div className="flex justify-between min-h-screen font-lato text-[#f2f2f2]">
-      <aside className="block sticky top-0 w-[285px] bg-[#333333] border-r border-white"></aside>
+      <aside className="block sticky top-0 w-[285px] bg-[#333333] border-r-[2px] border-[#f2f2f2]"></aside>
       <main className="flex flex-col grow">
-        <div className="flex sticky top-0 items-center px-8 h-[58px] bg-[#4f4f4f] z-10">
+        <div className="flex sticky top-0 items-center px-[26px] h-[58px] bg-[#4f4f4f] z-10">
           <Icon name="search" width={16} height={16} />
         </div>
 

@@ -12,18 +12,15 @@ export const countDaysLeft = (deadline: string) => {
   return difference > 0 ? difference : 0;
 };
 
-export const extractDate = (date: string | undefined) => {
-  if (date) {
-    return date.slice(0, 10);
-  }
+export const extractDate = (
+  date: string,
+  toLocale: boolean = false
+): string => {
+  const isoDate = date.slice(0, 10);
 
-  return undefined;
+  return toLocale ? isoDate.split("-").reverse().join("/") : isoDate;
 };
 
-export const extractTime = (date: string | undefined) => {
-  if (date) {
-    return date.slice(12, 16);
-  }
-
-  return undefined;
+export const extractTime = (date: string) => {
+  return date.slice(12, 16);
 };

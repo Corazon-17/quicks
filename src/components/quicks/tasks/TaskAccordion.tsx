@@ -1,6 +1,6 @@
 import { Icon } from "@/components/utils";
 import { Sticker, TaskModel } from "@/types";
-import { countDaysLeft } from "@/utils";
+import { countDaysLeft, extractDate } from "@/utils";
 import { useRef, useState } from "react";
 import Stickers from "./Stickers";
 
@@ -16,34 +16,41 @@ export default function TaskAccordion({ task }: TaskAccordionProps) {
   const [editTaskDetail, setEditTaskDetail] = useState<boolean>(false);
 
   const taskDetailRef = useRef<HTMLDivElement>(null);
-  const deadline = task.deadline.slice(0, 10);
-  const daysLeft = countDaysLeft(deadline);
+  const deadline = extractDate(task.deadline, true);
+  const daysLeft = countDaysLeft(extractDate(task.deadline));
 
   return (
     <div className="grid gap-2 py-4 ">
-      <div className="grid grid-cols-[65%_35%]">
-        <div className="grid grid-cols-[24px_1fr] gap-1 items-start">
-          <Icon
-            name={`${task.completed ? "square_checked" : "square"}`}
-            width={24}
-          />
+      <div className="grid grid-cols-[65%_35%] items-start">
+        <div className="grid grid-cols-[24px_1fr] gap-1 ">
+          <div className="pt-[2px]">
+            <Icon
+              name={`${task.completed ? "square_checked" : "square"}`}
+              width={18}
+            />
+          </div>
           <span className={`font-bold ${task.completed && "line-through"}`}>
             {task.title}
           </span>
         </div>
-        <div className="h-max justify-self-end">
+        <div className="h-max justify-self-end items-center pt-[2.5px]">
           <div className="flex items-center gap-2 text-12">
-            <span className="text-red-400">{daysLeft} Days Left</span>
+            <span className="text-[#EB5757] whitespace-nowrap">
+              {task.completed ? "" : `${daysLeft} Days Left`}
+            </span>
             <span>{deadline}</span>
             <button onClick={() => setCollapse(!collapse)}>
-              <Icon name="arrow_down_black" width={10} />
+              <Icon
+                name={collapse ? "arrow_up_black" : "arrow_down_black"}
+                width={10}
+              />
             </button>
             <div className="grid relative">
               <button onClick={() => setToggleOpt(!toggleOpt)}>
                 <Icon name="other" width={14} />
               </button>
               {toggleOpt && (
-                <button className="absolute right-0 top-4 w-20 text-start bg-white border border-black rounded text-red-500 px-3 py-1">
+                <button className="absolute right-0 top-4 w-20 text-start bg-white border border-[#828282] rounded text-[#EB5757] px-3 py-1">
                   Delete
                 </button>
               )}
@@ -78,7 +85,9 @@ export default function TaskAccordion({ task }: TaskAccordionProps) {
               suppressContentEditableWarning={true}
               onFocus={() => setEditTaskDetail(true)}
               onBlur={() => setEditTaskDetail(false)}
-              className={`leading-4 ${editTaskDetail && "px-2 py-1"}`}
+              className={`leading-4 outline-none rounded ${
+                editTaskDetail && "px-2 py-1 border border-[#E0E0E0]"
+              }`}
             >
               {task.description}
             </div>
@@ -86,7 +95,7 @@ export default function TaskAccordion({ task }: TaskAccordionProps) {
 
           <Stickers stickerIds={task.stickerIds} />
         </div>
-      )}{" "}
+      )}
     </div>
   );
 }
