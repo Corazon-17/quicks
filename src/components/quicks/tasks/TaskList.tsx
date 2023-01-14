@@ -19,7 +19,12 @@ export default function TaskList() {
       await axios
         .get(url)
         .then(async (response) => {
-          setAllTask(response.data);
+          const data = response.data
+          const tasks: TaskModel[] = data.map((task: TaskModel) => {
+            return {...task, stickerIds: [task.stickerIds]}
+          })
+          
+          setAllTask(tasks);
           setIsLoading(false);
         })
         .catch((error) => console.log(error));

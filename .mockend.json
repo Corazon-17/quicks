@@ -78,9 +78,9 @@
         "maxLength": 100
       }
     },
-    "stickerId": {
+    "stickerIds": {
       "int": {
-        "min": 1,
+        "min": 0,
         "max": 7
       }
     },

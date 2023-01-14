@@ -28,7 +28,7 @@ export default function Inbox() {
         <div className="flex relative w-max justify-end">
           <div
             className="absolute right-3 w-[68px] h-[68px] rounded-full bg-gray-400"
-            onClick={() => setActiveQuick(null)}
+            onClick={() => setActiveQuick(null )}
           ></div>
           <div className="z-10">
             <Icon

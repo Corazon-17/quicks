@@ -84,7 +84,7 @@ export default function TaskAccordion({ task }: TaskAccordionProps) {
             </div>
           </div>
 
-          <Stickers stickerId={task.stickerId} />
+          <Stickers stickerIds={task.stickerIds} />
         </div>
       )}{" "}
     </div>
