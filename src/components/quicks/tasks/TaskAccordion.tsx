@@ -1,7 +1,7 @@
-import { Icon } from "@/components/utils";
+import { DatePicker, Icon } from "@/components/utils";
 import { Sticker, TaskModel } from "@/types";
 import { countDaysLeft, extractDate } from "@/utils";
-import { useRef, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import Stickers from "./Stickers";
 
 interface TaskAccordionProps {
@@ -14,10 +14,44 @@ export default function TaskAccordion({ task }: TaskAccordionProps) {
   );
   const [toggleOpt, setToggleOpt] = useState<boolean>(false);
   const [editTaskDetail, setEditTaskDetail] = useState<boolean>(false);
+  const [editTaskTitle, setEditTaskTitle] = useState<boolean>(false);
+  const [deadline, setDeadline] = useState<string>(
+    extractDate(task.deadline, true) as string
+  );
+  const [daysLeft, setDaysLeft] = useState<number>(countDaysLeft(task.deadline))
 
   const taskDetailRef = useRef<HTMLDivElement>(null);
-  const deadline = extractDate(task.deadline, true);
-  const daysLeft = countDaysLeft(extractDate(task.deadline) as string);
+  const taskTitleRef = useRef<HTMLDivElement>(null);
+
+  const handleDeadlineChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.value;
+
+    if (newValue.split("/").length === 3) {
+      const [date, month, year] = newValue.split("/");
+
+      if (
+        !Number.isNaN(Number(date)) &&
+        !Number.isNaN(Number(month)) &&
+        !Number.isNaN(Number(year))
+      ) {
+        if (
+          Number(date) > 0 &&
+          Number(date) < 32 &&
+          Number(month) > 0 &&
+          Number(month) < 13
+        ) {
+          const newDeadline = `${
+            Number(date) < 10 ? `0${Number(date)}` : date
+          }/${Number(month) < 10 ? `0${Number(month)}` : month}/${year}`;
+          setDeadline(newDeadline);
+        }
+      }
+    }
+  };
+
+  useEffect(() => {
+    setDaysLeft(countDaysLeft(deadline))
+  }, [deadline])
 
   return (
     <div className="grid gap-2 mb-[22px] ">
@@ -29,9 +63,18 @@ export default function TaskAccordion({ task }: TaskAccordionProps) {
               width={18}
             />
           </div>
-          <span className={`font-bold ${task.completed && "line-through"}`}>
-            {task.title}
-          </span>
+          <div
+            ref={taskTitleRef}
+            contentEditable={true}
+            suppressContentEditableWarning={true}
+            onFocus={() => setEditTaskTitle(true)}
+            onBlur={() => setEditTaskTitle(false)}
+            className={`pt-[2px] font-bold break-all leading-4 outline-none rounded ${
+              editTaskTitle && "px-2 py-1 border border-[#E0E0E0]"
+            } ${task.completed && "line-through"}`}
+          >
+            {task.title ? task.title : ""}
+          </div>
         </div>
         <div className="h-max justify-self-end items-center pt-[2.5px]">
           <div className="flex items-center gap-2 text-12">
@@ -62,19 +105,16 @@ export default function TaskAccordion({ task }: TaskAccordionProps) {
         <div className="grid px-4 gap-2">
           <div className="grid grid-cols-[20px_1fr] pl-2 w-max relative gap-4 items-center">
             <Icon name="clock" width={18} />
-            {/* <div className="flex justify-between w-36 px-2 py-1 border border-black rounded">
-            <span>12/06/2021</span>
-            <Icon name="calendar" />
-          </div> */}
-            <input
-              type="date"
-              value={deadline}
-              onChange={() => {}}
-              className="border border-black rounded px-2 py-1"
-            />
+            <div className="flex justify-between items-center w-36 px-2 py-1 border border-black rounded">
+              <input
+                className="w-24 outline-none"
+                value={deadline}
+                onChange={(e) => handleDeadlineChange(e)}
+              />
+              <DatePicker value={deadline} setValue={setDeadline} />
+            </div>
           </div>
 
-          {/* To get the value: taskDetailRef.current?.innerHTML */}
           <div className="grid grid-cols-[20px_1fr] pl-2 gap-4 items-start">
             <button onClick={() => taskDetailRef.current?.focus()}>
               <Icon name="pencil" width={16} />
@@ -85,11 +125,11 @@ export default function TaskAccordion({ task }: TaskAccordionProps) {
               suppressContentEditableWarning={true}
               onFocus={() => setEditTaskDetail(true)}
               onBlur={() => setEditTaskDetail(false)}
-              className={`leading-4 outline-none rounded ${
+              className={`break-all leading-4 outline-none rounded ${
                 editTaskDetail && "px-2 py-1 border border-[#E0E0E0]"
               }`}
             >
-              {task.description}
+              {task.description ? task.description : "No Description"}
             </div>
           </div>
 

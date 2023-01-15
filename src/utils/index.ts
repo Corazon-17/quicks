@@ -5,8 +5,9 @@ export const getTruthyKeys = (obj: { [key: string]: boolean }): string[] => {
 };
 
 export const countDaysLeft = (deadline: string) => {
+  const [date, month, year] = deadline.split("/");
   const today = new Date();
-  const end = new Date(deadline);
+  const end = new Date(`${month}-${date}-${year}`);
   const difference = end.getDate() - today.getDate();
 
   return difference > 0 ? difference : 0;
@@ -29,8 +30,8 @@ export const extractTime = (date: string | undefined) => {
   if (!date) {
     return undefined;
   }
-  
-  const isoDate = new Date(date)
 
-  return isoDate.toTimeString().slice(0, 5)
+  const isoDate = new Date(date);
+
+  return isoDate.toTimeString().slice(0, 5);
 };

@@ -35,7 +35,10 @@ const stickerColors = Object.fromEntries(
 
 const initStickerObj = (stickerIds: number[]): StickerObj => {
   return Object.fromEntries(
-    stickers.map((key, i) => [key, stickerIds.includes(i)])
+    stickers.map((key, i) => [
+      key,
+      stickerIds.length > 0 ? stickerIds.includes(i) : false,
+    ])
   );
 };
 
@@ -62,7 +65,10 @@ export default function Stickers({ stickerIds }: StickersProps) {
         onClick={() => setToggleOpt(!toggleOpt)}
       >
         <div className="py-1 fhd:pt-[14.83px] fhd:pb-[15.83px]">
-          <Icon name={selected.length > 0 ? "bookmark_blue" : "bookmark"} width={16} />
+          <Icon
+            name={selected.length > 0 ? "bookmark_blue" : "bookmark"}
+            width={16}
+          />
         </div>
 
         <div className="flex flex-wrap gap-2 px-2">
@@ -87,7 +93,9 @@ export default function Stickers({ stickerIds }: StickersProps) {
           {options.map((opt, i) => (
             <div
               key={i}
-              className={`px-2 py-1 rounded ${selected.includes(opt) && "border border-[#2F80ED]"}`}
+              className={`px-2 py-1 rounded ${
+                selected.includes(opt) && "border border-[#2F80ED]"
+              }`}
               style={{ backgroundColor: stickerColors[opt] }}
               onClick={() => updateValue(opt)}
             >

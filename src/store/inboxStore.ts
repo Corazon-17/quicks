@@ -23,7 +23,6 @@ export const useInboxStore = create<Inbox>((set, get) => ({
         return { ...inbox };
       }
     });
-    console.log(newData)
 
     set({ inboxData: newData });
   },

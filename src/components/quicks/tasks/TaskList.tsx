@@ -1,6 +1,6 @@
 import { Icon } from "@/components/utils";
 import { useTaskStore, useUserStore } from "@/store";
-import { Sticker, TaskModel } from "@/types";
+import { TaskModel } from "@/types";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import TaskAccordion from "./TaskAccordion";
@@ -11,28 +11,26 @@ export default function TaskList() {
   const taskDataState: TaskModel[] = useTaskStore((state) => state.taskData);
   const setTaskUserId = useTaskStore((state) => state.setUserId);
   const setTaskDataState = useTaskStore((state) => state.setTaskData);
+  const addNewTask = useTaskStore((state) => state.addNewTask);
 
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [toggleTask, setToggleTask] = useState<boolean>(false);
 
-  // const addBlankTask = () => {
-  //   const date = new Date();
-  //   const blankTask: TaskModel = {
-  //     id: taskDataState.length + 1,
-  //     userId: taskDataId as number,
-  //     title: "",
-  //     description: "",
-  //     stickerIds: [],
-  //     deadline: date.toJSON().slice(0, 10),
-  //     completed: false,
-  //   };
-  //   const newTaskData: TaskModel[] = [
-  //     blankTask,
-  //     ...(taskDataState as TaskModel[]),
-  //   ];
+  const addBlankTask = () => {
+    const date = new Date();
 
-  //   setTaskDataState(newTaskData);
-  // };
+    const blankTask: TaskModel = {
+      id: taskDataState.length + 1,
+      userId: taskUserId as number,
+      title: "",
+      description: "",
+      stickerIds: [],
+      deadline: date.toJSON().slice(0, 10),
+      completed: false,
+    };
+
+    addNewTask(blankTask);
+  };
 
   useEffect(() => {
     const fetchTaskData = async () => {
@@ -87,7 +85,7 @@ export default function TaskList() {
             )}
           </div>
           <button
-            // onClick={() => addBlankTask()}
+            onClick={() => addBlankTask()}
             className="h-max bg-blue-500 rounded px-3 py-1.5 text-white"
           >
             New Task
