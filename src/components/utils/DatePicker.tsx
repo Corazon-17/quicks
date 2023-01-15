@@ -158,7 +158,6 @@ export function DatePicker({ value, setValue }: DatePickerProps) {
  * @returns
  */
 const getDaysInMonth = (month: number, year: number) => {
-  console.log(month, year);
   const nDays = new Date(year, month, 0).getDate();
 
   const currentMonth = [...Array(nDays)].map((_, i) => {
