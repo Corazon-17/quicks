@@ -96,7 +96,7 @@ export default function InboxChat({ inbox, setShowChat }: InboxChatProps) {
         })}
       </div>
 
-      <div className="flex justify-between items-center gap-2 sticky bottom-0 px-[20px] pt-[5px] pb-[10px] fhd:pt-[25px] fhd:pb-[19px]">
+      <div className="flex z-50 justify-between items-center gap-2 sticky bottom-0 px-[20px] pt-[5px] pb-[10px] fhd:pt-[25px] fhd:pb-[19px]">
         <div className="grid relative w-full">
           {replyMsg && (
             <Reply message={replyMsg} handleClose={closeReplyHandler} />
@@ -154,7 +154,7 @@ const Reply = ({
   handleClose: () => void;
 }) => {
   return (
-    <div className="flex absolute bottom-[35px] z-[100] w-full text-12 bg-blue-200 px-2 py-2 border border-[#828282] rounded">
+    <div className="flex absolute bottom-[35px] w-full text-12 bg-blue-200 px-2 py-2 border border-[#828282] rounded">
       <div className="grid grid-cols-[1fr_24px] w-full">
         <div className="grid gap-[1px]">
           <span className="font-bold">Replying to {message.senderName}</span>
