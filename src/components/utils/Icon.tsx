@@ -17,7 +17,7 @@ export function Icon({
   bgHeight,
   bgRounded,
 }: IconProps) {
-  const path = `src/assets/icons/${name}.svg`;
+  const path = `./assets/icons/${name}.svg`;
   return (
     <div
       className={`flex items-center justify-center ${
