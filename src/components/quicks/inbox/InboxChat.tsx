@@ -119,7 +119,7 @@ export default function InboxChat({ inbox, setShowChat }: InboxChatProps) {
 
       {isNewMsg && (
         <div
-          className="grid absolute w-full z-0 px-4 left-0 bottom-[68px]"
+          className="grid absolute w-full z-50 px-4 left-0 bottom-[68px]"
           onClick={() => setIsNewMsg(false)}
         >
           {/* New Message */}
