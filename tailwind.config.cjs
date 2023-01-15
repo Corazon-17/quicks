@@ -5,7 +5,6 @@ module.exports = {
     extend: {
       fontFamily: {
         lato: ["Lato", "sans-serif"],
-        latoBold: ["Lato Bold", "sans-serif"]
       },
       fontSize: {
         12: "12px",
