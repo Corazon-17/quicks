@@ -8,6 +8,8 @@ export default function Inbox() {
   const activeQuick = useQuickStore((state) => state.active);
   const setActiveQuick = useQuickStore((state) => state.setActive);
 
+  const spanGap = 11.88 + 60;
+  const contentGap = 13 + 68;
   const [active, setActive] = useState<boolean>(false);
 
   useEffect(() => {
@@ -27,16 +29,17 @@ export default function Inbox() {
       {active && activeQuick === "Inbox" ? (
         <div className="flex relative w-max justify-end">
           <div
-            className="absolute right-3 w-[68px] h-[68px] rounded-full bg-gray-400"
-            onClick={() => setActiveQuick(null )}
+            className="absolute right-[15px] w-[68px] h-[68px] rounded-full bg-[#4f4f4f]"
+            onClick={() => setActiveQuick(null)}
           ></div>
           <div className="z-10">
             <Icon
-              name="inbox_purple"
-              width={32}
+              name="inbox"
+              width={25.19}
+              height={25.19}
               bgWidth={68}
               bgHeight={68}
-              bgColor="#fff"
+              bgColor="#8785FF"
               bgRounded
             />
           </div>
@@ -48,18 +51,26 @@ export default function Inbox() {
             width={24.24}
             bgWidth={60}
             bgHeight={60}
-            bgColor="#fff"
+            bgColor="#f2f2f2"
             bgRounded
           />
         </div>
       )}
 
       {expand && !activeQuick && (
-        <span className="absolute bottom-16 w-full text-center">Inbox</span>
+        <span
+          className="absolute w-full text-center"
+          style={{ bottom: spanGap }}
+        >
+          Inbox
+        </span>
       )}
 
       {active && activeQuick === "Inbox" && (
-        <div className="flex flex-col z-20 gap-2 absolute bottom-20 w-[480px] h-[480px] rounded-md bg-white">
+        <div
+          className="flex flex-col absolute w-[560px] h-[480px] fhd:w-[734px] fhd:h-[737px] rounded-md bg-white text-[#4f4f4f] text-14 z-20"
+          style={{ bottom: contentGap }}
+        >
           <InboxList />
         </div>
       )}

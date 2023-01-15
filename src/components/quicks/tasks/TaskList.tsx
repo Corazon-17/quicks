@@ -63,7 +63,7 @@ export default function TaskList() {
 
   return (
     <div className="flex flex-col w-full h-full">
-      <div className="sticky top-0 py-[10px] fhd:pt-[19px] fhd:pb-[10px] bg-white z-10 rounded-md">
+      <div className="sticky top-0 pb-[10px] pt-[22px] fhd:pt-[19px] bg-white z-20 rounded-md">
         <div className="flex justify-between px-4">
           <div className="grid relative place-items-center w-64">
             <button
@@ -98,10 +98,10 @@ export default function TaskList() {
       {isLoading && (
         <div className="flex absolute top-0 h-full w-full items-center justify-center">
           <div className="grid">
-            <div className="w-max animate-spin">
-              <Icon name="spinner" />
+            <div className="w-full animate-spin">
+              <Icon name="spinner" width={61.22} />
             </div>
-            <span>Loading Tasks...</span>
+            <span className="font-bold">Loading Tasks...</span>
           </div>
         </div>
       )}
@@ -109,7 +109,10 @@ export default function TaskList() {
       {!isLoading && taskDataState && (
         <div className="overflow-y-auto divide-y divide-black pl-4 pr-2 min-h-[1fr]">
           {taskDataState.map((task, i) => (
-            <TaskAccordion key={i} task={task} />
+            <div>
+              {i > 0 && <div className="h-[22px]"></div>}
+              <TaskAccordion key={i} task={task} />
+            </div>
           ))}
         </div>
       )}

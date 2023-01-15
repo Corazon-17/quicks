@@ -17,10 +17,10 @@ export default function TaskAccordion({ task }: TaskAccordionProps) {
 
   const taskDetailRef = useRef<HTMLDivElement>(null);
   const deadline = extractDate(task.deadline, true);
-  const daysLeft = countDaysLeft(extractDate(task.deadline));
+  const daysLeft = countDaysLeft(extractDate(task.deadline) as string);
 
   return (
-    <div className="grid gap-2 py-4 ">
+    <div className="grid gap-2 mb-[22px] ">
       <div className="grid grid-cols-[65%_35%] items-start">
         <div className="grid grid-cols-[24px_1fr] gap-1 ">
           <div className="pt-[2px]">

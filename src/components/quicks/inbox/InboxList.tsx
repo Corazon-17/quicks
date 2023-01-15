@@ -13,7 +13,7 @@ export default function InboxList() {
   const inboxDataState: InboxModel[] = useInboxStore(
     (state) => state.inboxData
   );
-  console.log(inboxDataState)
+
   const setInboxUserId = useInboxStore((state) => state.setUserId);
   const setInboxDataState = useInboxStore((state) => state.setInboxData);
 
@@ -102,15 +102,15 @@ export default function InboxList() {
   return (
     <div className="flex flex-col w-full h-full">
       {!isShowChat && (
-        <div className="w-full px-4 pt-3 pb-1">
-          <div className="flex sticky top-0 bg-white justify-between w-full h-max px-8 border border-black rounded-md">
+        <div className="w-full px-[32px] mt-[24px] pb-[22px]">
+          <div className="flex gap-2 sticky top-0 bg-white justify-between w-full h-[32px] px-[58.82px] border border-black rounded-md">
             <input
-              placeholder="search"
+              placeholder="Search"
               value={searchText}
               onChange={(e) => setSearchText(e.target.value)}
-              className="text-black outline-none grow"
+              className="text-black placeholder-[#333333]  outline-none grow"
             />
-            <Icon name="search_black" width={16} />
+            <Icon name="search_black" width={12} />
           </div>
         </div>
       )}
@@ -118,44 +118,50 @@ export default function InboxList() {
       {isLoading && (
         <div className="flex absolute top-0 h-full w-full items-center justify-center text-black">
           <div className="grid">
-            <div className="w-max animate-spin">
-              <Icon name="spinner" />
+            <div className="w-full animate-spin">
+              <Icon name="spinner" width={61.22} />
             </div>
-            <span>Loading Inbox...</span>
+            <span className="font-bold">Loading Inbox...</span>
           </div>
         </div>
       )}
 
       {!isLoading && inboxDataState && (
-        <div className="flex flex-col w-full h-full px-4 overflow-y-auto">
+        <div className="flex flex-col w-full h-full pl-[32px] pr-[23px] mb-[24px] overflow-y-auto">
           <div className="grid grid-cols-1 divide-y divide-gray-400">
             {inboxDataState
-              .filter((inbox) => inbox.name.includes(searchText))
+              .filter((inbox) =>
+                inbox.name.toLowerCase().includes(searchText.toLowerCase())
+              )
               .map((inbox, i) => (
                 <div key={i} onClick={() => handleInboxClick(i)}>
-                  <InboxCard inbox={inbox} />
+                  {i > 0 && <div className="mb-[22px]"></div>}
+                  <InboxCard inbox={inbox} isNewMessage={i > 0 ? false : true} />
                 </div>
               ))}
 
-            <div onClick={() => handleSupportClick()}>
-              <InboxCard
-                inbox={{
-                  id: 0,
-                  userId: 1,
-                  name: "FastVisa Support",
-                  messages: [
-                    {
-                      id: 0,
-                      inboxId: 0,
-                      senderId: 0,
-                      senderName: "",
-                      createdAt: "2023-01-11",
-                      body: "Hey There",
-                    },
-                  ],
-                }}
-              />
-            </div>
+            {"fastvisa support".includes(searchText.toLowerCase()) && (
+              <div className="pt-[22px]" onClick={() => handleSupportClick()}>
+                <InboxCard
+                  inbox={{
+                    id: 0,
+                    userId: 1,
+                    name: "FastVisa Support",
+                    messages: [
+                      {
+                        id: 0,
+                        inboxId: 0,
+                        senderId: 0,
+                        senderName: "",
+                        createdAt: "2023-01-11",
+                        body: "Hey there! Welcome to your inbox.",
+                      },
+                    ],
+                  }}
+                  fastVisaSupport
+                />
+              </div>
+            )}
           </div>
         </div>
       )}

@@ -13,14 +13,24 @@ export const countDaysLeft = (deadline: string) => {
 };
 
 export const extractDate = (
-  date: string,
+  date: string | undefined,
   toLocale: boolean = false
-): string => {
+) => {
+  if (!date) {
+    return undefined;
+  }
+
   const isoDate = date.slice(0, 10);
 
   return toLocale ? isoDate.split("-").reverse().join("/") : isoDate;
 };
 
-export const extractTime = (date: string) => {
-  return date.slice(12, 16);
+export const extractTime = (date: string | undefined) => {
+  if (!date) {
+    return undefined;
+  }
+  
+  const isoDate = new Date(date)
+
+  return isoDate.toTimeString().slice(0, 5)
 };
